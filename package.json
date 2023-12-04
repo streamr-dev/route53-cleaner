@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-route-53": "^3.454.0"
+  }
+}
