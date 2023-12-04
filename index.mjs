@@ -4,6 +4,7 @@ const client = new Route53Client({region: 'us-east-1'});
 const ZONE_ID = "Z0914303KWEGX7VEXJFT"
 const MAX_CHANGES = 1000;
 const MAX_RESULTS = 300;
+const IP_LIMIT = 1;
 
 let recordSets = [];
 let isTruncated = true;
@@ -41,9 +42,8 @@ const ipCounts = recordSets.reduce((acc, recordSet) => {
 const sortedIPCounts = Object.entries(ipCounts).sort((a, b) => b[1].count - a[1].count);
 
 for (const [ip, data] of sortedIPCounts) {
-  if (data.count > 1) {
-    console.log(`Processing IP: ${ip}`);
-    console.log(`Entries to be deleted: ${data.count}`);
+  if (data.count > IP_LIMIT) {
+    console.log(`Processing IP: ${ip}. Entries to be deleted: ${data.count}`);
     const changes = data.records.map(recordSet => ({
       Action: "DELETE",
       ResourceRecordSet: {
@@ -59,7 +59,6 @@ for (const [ip, data] of sortedIPCounts) {
     }));
 
     for (let i = 0; i < changes.length; i += MAX_CHANGES) {
-      console.log(`Processing batch number: ${i / MAX_CHANGES + 1}`);
       const batchChanges = changes.slice(i, i + MAX_CHANGES);
       const input = {
         ChangeBatch: {
