@@ -4,7 +4,7 @@ const client = new Route53Client({region: 'us-east-1'});
 const ZONE_ID = "Z0914303KWEGX7VEXJFT"
 const MAX_CHANGES = 1000;
 const MAX_RESULTS = 300;
-const IP_LIMIT = 1;
+const IP_LIMIT = 100;
 
 let recordSets = [];
 let isTruncated = true;
@@ -40,6 +40,8 @@ const ipCounts = recordSets.reduce((acc, recordSet) => {
 }, {});
 
 const sortedIPCounts = Object.entries(ipCounts).sort((a, b) => b[1].count - a[1].count);
+
+console.log(sortedIPCounts.slice(0, 30));
 
 for (const [ip, data] of sortedIPCounts) {
   if (data.count > IP_LIMIT) {
