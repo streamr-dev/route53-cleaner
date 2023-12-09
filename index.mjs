@@ -41,6 +41,7 @@ const ipCounts = recordSets.reduce((acc, recordSet) => {
 
 const sortedIPCounts = Object.entries(ipCounts).sort((a, b) => b[1].count - a[1].count);
 
+console.log(new Date().toISOString());
 console.log(sortedIPCounts.slice(0, 30));
 
 for (const [ip, data] of sortedIPCounts) {
