@@ -4,7 +4,7 @@ const client = new Route53Client({region: 'us-east-1'});
 const ZONE_ID = "Z0914303KWEGX7VEXJFT"
 const MAX_CHANGES = 1000;
 const MAX_RESULTS = 300;
-const IP_LIMIT = 100;
+const IP_LIMIT = 10;
 
 let recordSets = [];
 let isTruncated = true;
